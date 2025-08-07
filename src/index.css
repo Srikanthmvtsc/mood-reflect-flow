@@ -2,95 +2,142 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* NeuroMirror Design System - Mood-based therapeutic colors and animations */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Base neutral theme */
+    --background: 240 15% 97%;
+    --foreground: 240 20% 15%;
+    --card: 240 15% 98%;
+    --card-foreground: 240 20% 15%;
+    --popover: 240 15% 98%;
+    --popover-foreground: 240 20% 15%;
+    --muted: 240 10% 92%;
+    --muted-foreground: 240 15% 45%;
+    --border: 240 12% 88%;
+    --input: 240 12% 90%;
+    --ring: 240 35% 70%;
+    --radius: 1rem;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    /* Mood-based color system */
+    /* Happy mood - warm, uplifting */
+    --mood-happy: 45 85% 75%;
+    --mood-happy-bg: 45 100% 97%;
+    --mood-happy-accent: 35 85% 65%;
+    --mood-happy-glow: 45 85% 75%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    /* Sad mood - cool, comforting */
+    --mood-sad: 220 40% 70%;
+    --mood-sad-bg: 220 50% 96%;
+    --mood-sad-accent: 210 45% 60%;
+    --mood-sad-glow: 220 40% 70%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Calm mood - serene, peaceful */
+    --mood-calm: 160 50% 75%;
+    --mood-calm-bg: 160 60% 97%;
+    --mood-calm-accent: 150 45% 65%;
+    --mood-calm-glow: 160 50% 75%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Anxious mood - soothing purples */
+    --mood-anxious: 280 40% 75%;
+    --mood-anxious-bg: 280 50% 96%;
+    --mood-anxious-accent: 270 45% 65%;
+    --mood-anxious-glow: 280 40% 75%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Angry mood - muted warm tones */
+    --mood-angry: 15 60% 70%;
+    --mood-angry-bg: 15 70% 96%;
+    --mood-angry-accent: 10 55% 60%;
+    --mood-angry-glow: 15 60% 70%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Neutral mood - balanced greens */
+    --mood-neutral: 140 30% 75%;
+    --mood-neutral-bg: 140 40% 96%;
+    --mood-neutral-accent: 135 35% 65%;
+    --mood-neutral-glow: 140 30% 75%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* Gradients for smooth transitions */
+    --gradient-calm: linear-gradient(135deg, hsl(var(--mood-calm-bg)), hsl(var(--mood-calm) / 0.1));
+    --gradient-happy: linear-gradient(135deg, hsl(var(--mood-happy-bg)), hsl(var(--mood-happy) / 0.15));
+    --gradient-sad: linear-gradient(135deg, hsl(var(--mood-sad-bg)), hsl(var(--mood-sad) / 0.1));
+    --gradient-anxious: linear-gradient(135deg, hsl(var(--mood-anxious-bg)), hsl(var(--mood-anxious) / 0.1));
+    --gradient-angry: linear-gradient(135deg, hsl(var(--mood-angry-bg)), hsl(var(--mood-angry) / 0.1));
+    --gradient-neutral: linear-gradient(135deg, hsl(var(--mood-neutral-bg)), hsl(var(--mood-neutral) / 0.1));
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Therapeutic shadows */
+    --shadow-soft: 0 8px 32px hsl(var(--foreground) / 0.08);
+    --shadow-mood: 0 12px 40px hsl(var(--mood-calm) / 0.2);
+    --shadow-glow: 0 0 30px hsl(var(--mood-calm-glow) / 0.3);
 
-    --radius: 0.5rem;
+    /* Animation durations */
+    --transition-smooth: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Dynamic color variables that change with mood */
+    --primary: var(--mood-calm);
+    --primary-foreground: 240 20% 15%;
+    --secondary: var(--mood-calm-bg);
+    --secondary-foreground: 240 20% 15%;
+    --accent: var(--mood-calm-accent);
+    --accent-foreground: 240 20% 15%;
+    --destructive: 0 65% 65%;
+    --destructive-foreground: 0 0% 98%;
   }
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+  /* Mood-specific theme classes */
+  .mood-happy {
+    --primary: var(--mood-happy);
+    --primary-foreground: 45 100% 15%;
+    --secondary: var(--mood-happy-bg);
+    --accent: var(--mood-happy-accent);
+    --background: var(--mood-happy-bg);
+    --shadow-mood: 0 12px 40px hsl(var(--mood-happy-glow) / 0.25);
+  }
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+  .mood-sad {
+    --primary: var(--mood-sad);
+    --primary-foreground: 220 100% 15%;
+    --secondary: var(--mood-sad-bg);
+    --accent: var(--mood-sad-accent);
+    --background: var(--mood-sad-bg);
+    --shadow-mood: 0 12px 40px hsl(var(--mood-sad-glow) / 0.25);
+  }
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+  .mood-calm {
+    --primary: var(--mood-calm);
+    --primary-foreground: 160 100% 15%;
+    --secondary: var(--mood-calm-bg);
+    --accent: var(--mood-calm-accent);
+    --background: var(--mood-calm-bg);
+    --shadow-mood: 0 12px 40px hsl(var(--mood-calm-glow) / 0.25);
+  }
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+  .mood-anxious {
+    --primary: var(--mood-anxious);
+    --primary-foreground: 280 100% 15%;
+    --secondary: var(--mood-anxious-bg);
+    --accent: var(--mood-anxious-accent);
+    --background: var(--mood-anxious-bg);
+    --shadow-mood: 0 12px 40px hsl(var(--mood-anxious-glow) / 0.25);
+  }
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+  .mood-angry {
+    --primary: var(--mood-angry);
+    --primary-foreground: 15 100% 15%;
+    --secondary: var(--mood-angry-bg);
+    --accent: var(--mood-angry-accent);
+    --background: var(--mood-angry-bg);
+    --shadow-mood: 0 12px 40px hsl(var(--mood-angry-glow) / 0.25);
+  }
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+  .mood-neutral {
+    --primary: var(--mood-neutral);
+    --primary-foreground: 140 100% 15%;
+    --secondary: var(--mood-neutral-bg);
+    --accent: var(--mood-neutral-accent);
+    --background: var(--mood-neutral-bg);
+    --shadow-mood: 0 12px 40px hsl(var(--mood-neutral-glow) / 0.25);
   }
 }
 
@@ -100,6 +147,49 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground transition-all duration-700 ease-in-out;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  /* Smooth transitions for mood changes */
+  .mood-transition {
+    transition: var(--transition-smooth);
+  }
+
+  /* Glass morphism effect */
+  .glass {
+    backdrop-filter: blur(16px) saturate(200%);
+    background-color: hsl(var(--background) / 0.75);
+    border: 1px solid hsl(var(--border) / 0.3);
+  }
+
+  /* Breathing animation for calm states */
+  .breathe {
+    animation: breathe 4s ease-in-out infinite;
+  }
+
+  @keyframes breathe {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.05); opacity: 1; }
+  }
+
+  /* Gentle pulse for UI elements */
+  .mood-pulse {
+    animation: mood-pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes mood-pulse {
+    0%, 100% { box-shadow: var(--shadow-soft); }
+    50% { box-shadow: var(--shadow-mood); }
+  }
+
+  /* Floating animation for mood indicators */
+  .float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
   }
 }
