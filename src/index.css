@@ -192,4 +192,53 @@
     0%, 100% { transform: translateY(0px); }
     50% { transform: translateY(-10px); }
   }
+
+  /* Mobile and tablet responsive improvements */
+  @media (max-width: 768px) {
+    .container {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+    
+    /* Adjust grid layouts for mobile */
+    .lg\\:grid-cols-12 {
+      grid-template-columns: 1fr;
+    }
+    
+    .md\\:grid-cols-2 {
+      grid-template-columns: 1fr;
+    }
+    
+    /* Chat window mobile adjustments */
+    .fixed.bottom-6.right-6.w-80 {
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      left: 1rem;
+      width: auto;
+    }
+    
+    /* Floating button mobile position */
+    .fixed.bottom-6.right-6.h-14.w-14 {
+      bottom: 1.5rem;
+      right: 1.5rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    /* Stack components vertically on small screens */
+    .grid.gap-6 {
+      gap: 1rem;
+    }
+    
+    /* Adjust padding for mobile */
+    .p-6, .px-6 {
+      padding: 1rem;
+    }
+    
+    .py-8 {
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+    }
+  }
 }

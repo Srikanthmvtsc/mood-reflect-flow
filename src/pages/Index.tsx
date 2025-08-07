@@ -6,6 +6,7 @@ import { SuggestionBox } from '@/components/SuggestionBox';
 import { SoundPlayer } from '@/components/SoundPlayer';
 import { MoodChart } from '@/components/MoodChart';
 import { BreathingExercise } from '@/components/BreathingExercise';
+import { TherapyChat } from '@/components/TherapyChat';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
@@ -265,6 +266,9 @@ const Index = () => {
           </div>
         </div>
       </motion.footer>
+
+      {/* Therapy Chat */}
+      <TherapyChat currentMood={currentMood?.emotion} />
     </div>
   );
 };
