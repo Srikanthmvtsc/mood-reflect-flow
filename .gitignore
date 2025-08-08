@@ -35,7 +35,7 @@ flask_backend/.env
 flask_backend/*.db
 
 # Python venv
-flask_backend/myenv/
+flask_backend/venv/
 
 # Node modules
 node_modules/
