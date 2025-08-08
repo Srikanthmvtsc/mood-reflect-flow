@@ -29,6 +29,9 @@ export const TherapyChat = ({ currentMood }: TherapyChatProps) => {
       timestamp: new Date(),
     }
   ]);
+  
+  // Emergency warning message
+  const emergencyWarning = "⚠️ Important: If you're experiencing thoughts of self-harm, suicide, or a mental health crisis, please contact a mental health professional immediately. You can use the help icon at the bottom right of this page for emergency contact information.";
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -65,6 +68,7 @@ export const TherapyChat = ({ currentMood }: TherapyChatProps) => {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({
           message: inputValue,
           mood: currentMood,
@@ -172,6 +176,13 @@ export const TherapyChat = ({ currentMood }: TherapyChatProps) => {
               {/* Messages */}
               <ScrollArea className="flex-1 p-4">
                 <div className="space-y-4">
+                  {/* Emergency Warning */}
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4">
+                    <p className="text-xs text-yellow-800 leading-relaxed">
+                      {emergencyWarning}
+                    </p>
+                  </div>
+                  
                   {messages.map((message) => (
                     <motion.div
                       key={message.id}

@@ -7,9 +7,14 @@ import { SoundPlayer } from '@/components/SoundPlayer';
 import { MoodChart } from '@/components/MoodChart';
 import { BreathingExercise } from '@/components/BreathingExercise';
 import { TherapyChat } from '@/components/TherapyChat';
+import UserProfile from '@/components/UserProfile';
+import HelpIcon from '@/components/HelpIcon';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
+import { Pointer } from 'lucide-react';
+import GameBar from '@/components/GameBar';
 
 interface MoodData {
   emotion: string;
@@ -25,6 +30,7 @@ interface Suggestion {
 }
 
 const Index = () => {
+  const { user } = useAuth();
   const [currentMood, setCurrentMood] = useState<MoodData | null>(null);
   const [moodHistory, setMoodHistory] = useState<MoodData[]>([]);
   const [suggestion, setSuggestion] = useState<Suggestion | null>(null);
@@ -35,6 +41,32 @@ const Index = () => {
   // API URL from environment variable (for Flask backend)
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
+  // Load mood history from backend
+  const loadMoodHistory = useCallback(async () => {
+    try {
+      const response = await fetch(`${API_URL}/mood-history?session_id=webcam-session&limit=50`, {
+        credentials: 'include',
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        const historyData: MoodData[] = data.history.map((item: any) => ({
+          emotion: item.emotion,
+          confidence: item.confidence,
+          timestamp: new Date(item.timestamp)
+        }));
+        setMoodHistory(historyData);
+      }
+    } catch (error) {
+      console.error('Error loading mood history:', error);
+    }
+  }, [API_URL]);
+
+  // Load mood history on component mount
+  useEffect(() => {
+    loadMoodHistory();
+  }, [loadMoodHistory]);
+
   // Apply mood-based theme to body
   useEffect(() => {
     if (currentMood) {
@@ -44,30 +76,32 @@ const Index = () => {
     }
   }, [currentMood]);
 
-  // Mock emotion detection (replace with actual API call)
+  // Real emotion detection with backend API
   const analyzeEmotion = useCallback(async (imageSrc: string) => {
     setIsAnalyzing(true);
     
     try {
-      // Mock API call - replace with actual Flask backend
-      // const formData = new FormData();
-      // formData.append('image', imageSrc);
-      // const response = await fetch(`${API_URL}/detect`, {
-      //   method: 'POST',
-      //   body: formData
-      // });
-      // const data = await response.json();
+      const response = await fetch(`${API_URL}/detect`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          image: imageSrc,
+          session_id: 'webcam-session'
+        }),
+      });
 
-      // Mock response for demo
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      const emotions = ['happy', 'sad', 'calm', 'anxious', 'angry', 'neutral'];
-      const randomEmotion = emotions[Math.floor(Math.random() * emotions.length)];
-      const confidence = 0.7 + Math.random() * 0.3;
+      if (!response.ok) {
+        throw new Error('Failed to analyze emotion');
+      }
+
+      const data = await response.json();
       
       const newMood: MoodData = {
-        emotion: randomEmotion,
-        confidence,
+        emotion: data.emotion,
+        confidence: data.confidence,
         timestamp: new Date()
       };
 
@@ -75,18 +109,18 @@ const Index = () => {
       setMoodHistory(prev => [...prev, newMood].slice(-50)); // Keep last 50 entries
       
       // Get AI suggestion
-      await getSuggestion(randomEmotion);
+      await getSuggestion(data.emotion);
       
       toast({
         title: "Mood Detected",
-        description: `You seem to be feeling ${randomEmotion} (${Math.round(confidence * 100)}% confidence)`,
+        description: `You seem to be feeling ${data.emotion} (${Math.round(data.confidence * 100)}% confidence)`,
       });
 
     } catch (error) {
       console.error('Error analyzing emotion:', error);
       toast({
         title: "Analysis Error",
-        description: "Unable to analyze mood. Please try again.",
+        description: "Unable to detect mood. Please ensure a clear camera view and unobstructed background.",
         variant: "destructive"
       });
     } finally {
@@ -181,7 +215,7 @@ const Index = () => {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <span className="text-lg">🧠</span>
+              <span className="text-lg" style={{ cursor: 'pointer' }}>🧠</span>
               </motion.div>
               <div>
                 <h1 className="text-xl font-bold">NeuroMirror</h1>
@@ -189,11 +223,14 @@ const Index = () => {
               </div>
             </div>
             
-            {currentMood && (
-              <Badge variant="outline" className="capitalize">
-                Currently: {currentMood.emotion}
-              </Badge>
-            )}
+            <div className="flex items-center gap-3">
+              {currentMood && (
+                <Badge variant="outline" className="capitalize">
+                  Currently: {currentMood.emotion}
+                </Badge>
+              )}
+              <UserProfile />
+            </div>
           </div>
         </div>
       </motion.header>
@@ -246,6 +283,9 @@ const Index = () => {
 
             {/* Breathing Exercise */}
             <BreathingExercise mood={currentMood?.emotion} />
+
+            {/* Game Bar */}
+            <GameBar />
           </motion.div>
         </div>
       </main>
@@ -269,6 +309,9 @@ const Index = () => {
 
       {/* Therapy Chat */}
       <TherapyChat currentMood={currentMood?.emotion} />
+      
+      {/* Help Icon */}
+      <HelpIcon />
     </div>
   );
 };

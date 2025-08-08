@@ -20,32 +20,22 @@ interface SoundPlayerProps {
 const moodSounds = {
   happy: {
     name: 'Uplifting Nature',
-    url: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav',
+    url: '/sounds/wolfgang-amadeus-mozart-vedrai-carino-don-giovanni-opera-remix-110734.mp3',
     description: 'Birds chirping with gentle wind'
   },
   sad: {
     name: 'Comfort Rain',
-    url: 'https://www.soundjay.com/misc/sounds/rain-01.wav',
+    url: '/sounds/the-groove-118232.mp3',
     description: 'Soft rainfall for healing'
   },
   calm: {
     name: 'Ocean Waves',
-    url: 'https://www.soundjay.com/misc/sounds/wave-1.wav',
-    description: 'Gentle waves on peaceful shore'
-  },
-  anxious: {
-    name: 'Forest Meditation',
-    url: 'https://www.soundjay.com/misc/sounds/wind-3.wav',
-    description: 'Rustling leaves and soft breeze'
-  },
-  angry: {
-    name: 'Mountain Stream',
-    url: 'https://www.soundjay.com/misc/sounds/water-1.wav',
+    url: '/sounds/ocean-waves-112906.mp3',
     description: 'Flowing water for inner peace'
   },
   neutral: {
     name: 'Ambient Peace',
-    url: 'https://www.soundjay.com/misc/sounds/wind-2.wav',
+    url: '/sounds/sound-effects-library-forest-stream.wav',
     description: 'Gentle ambient sounds'
   }
 };
@@ -69,6 +59,29 @@ export const SoundPlayer = ({ suggestedSound, mood = 'calm' }: SoundPlayerProps)
     const audio = audioRef.current;
     if (!audio) return;
 
+    // When sound changes, reset the player
+    const wasPlaying = isPlaying;
+    audio.currentTime = 0;
+    setCurrentTime(0);
+
+    // If it was playing, start playing the new sound
+    if (wasPlaying) {
+      const playNewSound = async () => {
+        try {
+          await audio.play();
+        } catch (error) {
+          console.warn('Auto-play prevented:', error);
+          setIsPlaying(false);
+        }
+      };
+      playNewSound();
+    }
+  }, [currentSound]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
     const updateTime = () => setCurrentTime(audio.currentTime);
     const updateDuration = () => setDuration(audio.duration);
     const handleEnded = () => setIsPlaying(false);
@@ -82,7 +95,7 @@ export const SoundPlayer = ({ suggestedSound, mood = 'calm' }: SoundPlayerProps)
       audio.removeEventListener('loadedmetadata', updateDuration);
       audio.removeEventListener('ended', handleEnded);
     };
-  }, []);
+  }, [isPlaying]);
 
   const togglePlayPause = () => {
     if (!audioRef.current) return;
@@ -119,7 +132,11 @@ export const SoundPlayer = ({ suggestedSound, mood = 'calm' }: SoundPlayerProps)
   };
 
   return (
-    <Card className="p-6 glass mood-transition">
+    <motion.div
+    whileHover={{ scale: 1.02 }}
+    transition={{ duration: 0.2 }}
+  >
+  <Card className="p-6 glass mood-transition hover:shadow-xl transition-all duration-300">
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
@@ -237,5 +254,6 @@ export const SoundPlayer = ({ suggestedSound, mood = 'calm' }: SoundPlayerProps)
         )}
       </div>
     </Card>
+    </motion.div>
   );
 };

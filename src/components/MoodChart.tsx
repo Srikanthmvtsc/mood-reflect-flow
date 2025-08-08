@@ -78,7 +78,11 @@ export const MoodChart = ({ moodHistory }: MoodChartProps) => {
   };
 
   return (
-    <Card className="p-6 glass mood-transition">
+     <motion.div
+  whileHover={{ scale: 1.02 }}
+  transition={{ duration: 0.2 }}
+>
+    <Card className="p-6 glass mood-transition hover:shadow-xl transition-all duration-300">
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
@@ -173,5 +177,6 @@ export const MoodChart = ({ moodHistory }: MoodChartProps) => {
         </div>
       </div>
     </Card>
+    </motion.div>
   );
 };

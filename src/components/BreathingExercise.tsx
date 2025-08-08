@@ -108,7 +108,11 @@ export const BreathingExercise = ({ mood = 'calm' }: BreathingExerciseProps) => 
   };
 
   return (
-    <Card className="p-6 glass mood-transition">
+    <motion.div
+  whileHover={{ scale: 1.02 }}
+  transition={{ duration: 0.2 }}
+>
+    <Card className="p-6 glass mood-transition hover:shadow-xl transition-all duration-300">
       <div className="space-y-6">
         <div className="text-center">
           <h3 className="text-lg font-semibold mb-2">Guided Breathing</h3>
@@ -231,5 +235,6 @@ export const BreathingExercise = ({ mood = 'calm' }: BreathingExerciseProps) => 
         </div>
       </div>
     </Card>
+    </motion.div>
   );
 };

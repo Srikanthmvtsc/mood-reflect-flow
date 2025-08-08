@@ -53,9 +53,20 @@ export const MoodDisplay = ({ currentMood, isAnalyzing }: MoodDisplayProps) => {
   const moodClass = currentMood ? moodColors[currentMood.emotion] || 'mood-neutral' : 'mood-calm';
 
   return (
-    <Card className={`p-6 glass mood-transition ${moodClass}`}>
-      <div className="text-center space-y-4">
-        <h3 className="text-lg font-semibold">Current Mood</h3>
+    <motion.div
+      whileHover={{ scale: 1.02 }}
+      transition={{ duration: 0.2 }}
+    >
+      <Card className={`p-6 glass mood-transition ${moodClass} hover:shadow-xl transition-all duration-300`}>
+        <div className="text-center space-y-4">
+          <motion.h3 
+            className="text-lg font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            Current Mood
+          </motion.h3>
         
         <AnimatePresence mode="wait">
           {isAnalyzing ? (
@@ -143,5 +154,6 @@ export const MoodDisplay = ({ currentMood, isAnalyzing }: MoodDisplayProps) => {
         </AnimatePresence>
       </div>
     </Card>
+    </motion.div>
   );
 };

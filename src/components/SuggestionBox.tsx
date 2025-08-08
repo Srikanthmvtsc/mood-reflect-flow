@@ -18,7 +18,11 @@ interface SuggestionBoxProps {
 
 export const SuggestionBox = ({ suggestion, isLoading, onRefresh }: SuggestionBoxProps) => {
   return (
-    <Card className="p-6 glass mood-transition mood-pulse">
+    <motion.div
+  whileHover={{ scale: 1.02 }}
+  transition={{ duration: 0.2 }}
+>
+    <Card className="p-6 glass mood-transition hover:shadow-xl transition-all duration-300">
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -125,5 +129,6 @@ export const SuggestionBox = ({ suggestion, isLoading, onRefresh }: SuggestionBo
         </AnimatePresence>
       </div>
     </Card>
+    </motion.div>
   );
 };
