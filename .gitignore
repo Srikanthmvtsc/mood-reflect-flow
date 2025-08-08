@@ -11,6 +11,8 @@ node_modules
 dist
 dist-ssr
 *.local
+# Ignore all .env files
+**/.env
 
 # Editor directories and files
 .vscode/*
@@ -22,3 +24,18 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Root env
+.env
+
+# Flask backend env
+flask_backend/.env
+
+# SQLite database
+flask_backend/*.db
+
+# Python venv
+flask_backend/myenv/
+
+# Node modules
+node_modules/
