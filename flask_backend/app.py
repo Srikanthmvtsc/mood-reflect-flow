@@ -18,10 +18,11 @@ from email.mime.multipart import MIMEMultipart
 import json
 import re
 from functools import wraps
-
 # Import DeepFace for emotion detection
 from deepface import DeepFace
 import pandas as pd
+from dotenv import load_dotenv
+load_dotenv()
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -1344,9 +1345,7 @@ def health_check():
     })
 
 if __name__ == '__main__':
-    logger.info("🚀 Starting NeuroMirror Flask Backend with DeepFace...")
-    logger.info(f"🎭 Emotion Detection: {'✅ DeepFace Ready' if deepface_init_success else '❌ DeepFace Not Ready'}")
-    logger.info(f"🤖 Gemini API Status: {'✅ Ready' if model is not None else '❌ Not Ready'}")
-    logger.info(f"🖥️  OpenCV Version: {cv2.__version__}")
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
+
     
